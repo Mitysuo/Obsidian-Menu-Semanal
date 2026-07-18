@@ -1,0 +1,18 @@
+[project]
+name = "obsidian-menu-semanal"
+version = "0.1.0"
+description = "Automações para planejar o cardápio semanal de refeições com a interface de notas do Obsidian."
+authors = [
+    {name = "Vinícius Mitsuo Furukava", email = "viniciusfurukava@gmail.com"}
+]
+readme = "README.md"
+
+[tool.poetry]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
