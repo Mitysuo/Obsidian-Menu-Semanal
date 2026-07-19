@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import time
+from types import TracebackType
 from typing import Any
 
 import requests
@@ -50,7 +51,8 @@ class TBCAClient:
         session.headers.update(
             {
                 "User-Agent": (
-                    "TBCADataCollector/1.0 (Python requests)"
+                    "TBCADataCollector/1.0 "
+                    "(Python requests)"
                 ),
                 "Accept": (
                     "text/html,application/xhtml+xml,application/xml;"
@@ -76,7 +78,6 @@ class TBCAClient:
 
         return session
 
-
     def _wait_before_request(self) -> None:
         if self._last_request_finished_at is None:
             return
@@ -95,7 +96,11 @@ class TBCAClient:
     ) -> requests.Response:
         self._wait_before_request()
 
-        logger.info(f"Executando requisição {method.upper()} {url}")
+        logger.info(
+            "Executando requisição %s %s",
+            method.upper(),
+            url,
+        )
 
         try:
             response = self.session.request(
@@ -111,10 +116,18 @@ class TBCAClient:
         finally:
             self._last_request_finished_at = time.monotonic()
 
-    def get(self, url: str, **kwargs: Any) -> requests.Response:
+    def get(
+        self,
+        url: str,
+        **kwargs: Any,
+    ) -> requests.Response:
         return self.request("GET", url, **kwargs)
 
-    def post(self, url: str, **kwargs: Any) -> requests.Response:
+    def post(
+        self,
+        url: str,
+        **kwargs: Any,
+    ) -> requests.Response:
         return self.request("POST", url, **kwargs)
 
     def close(self) -> None:
@@ -125,8 +138,8 @@ class TBCAClient:
 
     def __exit__(
         self,
-        exception_type: object,
-        exception_value: object,
-        traceback: object,
+        exception_type: type[BaseException] | None,
+        exception_value: BaseException | None,
+        traceback: TracebackType | None,
     ) -> None:
         self.close()
